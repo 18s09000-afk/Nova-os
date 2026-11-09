@@ -13,9 +13,10 @@
 | Fcitx5仮想キーボード用desktopエントリー | Debianパッケージ内容を確認 |
 | live-build実行 | ベース取得・検証後、debootstrapのマウントで停止 |
 | QEMU 10.0.13 / TCG / OVMF UEFI | ファームウェアのみ起動・QMP応答・画面取得成功 |
-| Nova ISO生成 | 未完了 |
-| NovaのUEFI起動・Plasma画面・日本語入力 | 未検証 |
-| GitHub Actionsでの実行 | まだ実行結果を取得していない |
+| Nova ISO生成 | GitHub Actionsで成功（初回ビルド約15分30秒） |
+| NovaのUEFI起動・Plasmaプロセス | GitHub Actionsで検査中 |
+| 日本語の実入力・アプリ操作・実機起動 | 未検証 |
+| GitHub Actionsでの実行 | ツール導入・設定検査・ISO生成成功。起動検査中 |
 
 ## クラウドで確認した制約
 
@@ -41,3 +42,8 @@ ActionsとArtifactsの `boot-result.json` で確認してください。
   ISOが作成されていても、その状態では起動確認済みとは扱わない。
 - PlasmaやFcitx5が起動しない: シリアルログイン後に `journalctl -b`、
   `systemctl status sddm`、`loginctl` で原因を確認。検査条件を弱めて通さない。
+
+初回実行: https://github.com/18s09000-afk/Nova-os/actions/runs/42560123758
+
+ISO生成は2026-11-09 13:24:47（日本時間）に完了しました。
+Artifactsのアップロードは起動テスト後に行います。
