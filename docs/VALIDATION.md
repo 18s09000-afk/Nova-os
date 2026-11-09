@@ -14,9 +14,9 @@
 | live-build実行 | ベース取得・検証後、debootstrapのマウントで停止 |
 | QEMU 10.0.13 / TCG / OVMF UEFI | ファームウェアのみ起動・QMP応答・画面取得成功 |
 | Nova ISO生成 | GitHub Actionsで成功（初回ビルド約15分30秒） |
-| NovaのUEFI起動・Plasmaプロセス | GitHub Actionsで検査中 |
+| NovaのUEFI起動・Plasmaプロセス | 初回はログイン未到達でタイムアウト。自動起動設定を追加して再検証中 |
 | 日本語の実入力・アプリ操作・実機起動 | 未検証 |
-| GitHub Actionsでの実行 | ツール導入・設定検査・ISO生成成功。起動検査中 |
+| GitHub Actionsでの実行 | ツール導入・設定検査・ISO生成成功。初回起動検査失敗、再検証中 |
 
 ## クラウドで確認した制約
 
@@ -47,3 +47,7 @@ ActionsとArtifactsの `boot-result.json` で確認してください。
 
 ISO生成は2026-11-09 13:24:47（日本時間）に完了しました。
 Artifactsのアップロードは起動テスト後に行います。
+
+初回の `boot-result.json` は `waiting for live user login` を記録しました。
+Debian live-buildの標準GRUBテンプレートにはタイムアウト設定がなかったため、
+ISO作成前のbinary hookで5秒後に既定Liveエントリーへ進む設定を追加しました。

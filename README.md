@@ -3,7 +3,7 @@
 Debian 13 (trixie) / x86-64 / KDE Plasma 6 ベースの Live OS 開発リポジトリです。
 目標ファイルは **`nova-os-0.1-amd64.iso`**。インストーラーは含めません。
 
-**現在の状態：GitHub ActionsでISO生成が成功しました。QEMUによるNovaの起動検査は進行中です。**
+**現在の状態：GitHub ActionsでISO生成が成功しました。初回QEMU検査はログイン待ちでタイムアウトしたため、GRUBの5秒自動起動設定を追加し再検証しています。**
 Codex Cloudではマウント権限がなくdebootstrapが停止しました。
 [初回実行](https://github.com/18s09000-afk/Nova-os/actions/runs/42560123758) の成功結果と `boot-result.json` を確認して初めて起動検証済みと扱います。
 詳細は [検証記録](docs/VALIDATION.md) を参照してください。

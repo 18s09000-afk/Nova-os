@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+# live-build runs binary hooks inside binary/, before checksums and ISO creation.
+# Stock Debian live-build GRUB has no timeout and otherwise waits for Enter forever.
+test -f boot/grub/config.cfg
+cat >> boot/grub/config.cfg <<'CFG'
+
+# Nova OS: start the live session automatically, keeping the menu accessible.
+set default=0
+set timeout_style=menu
+set timeout=5
+CFG
+if [ -f isolinux/isolinux.cfg ]; then
+    sed -i 's/^timeout .*/timeout 50/' isolinux/isolinux.cfg
+fi
