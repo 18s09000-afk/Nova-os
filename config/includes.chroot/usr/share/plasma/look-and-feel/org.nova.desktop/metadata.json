@@ -1,0 +1,15 @@
+{
+  "KPlugin": {
+    "Id": "org.nova.desktop",
+    "Name": "Nova Dark",
+    "Description": "Nova OS cyan night desktop",
+    "Version": "0.1",
+    "License": "GPL-3.0-or-later",
+    "Authors": [
+      {
+        "Name": "Nova OS Project"
+      }
+    ]
+  },
+  "KPackageStructure": "Plasma/LookAndFeel"
+}

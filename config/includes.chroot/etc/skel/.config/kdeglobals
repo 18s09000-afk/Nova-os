@@ -1,0 +1,8 @@
+[General]
+ColorScheme=NovaDark
+Name=Nova Dark
+[KDE]
+LookAndFeelPackage=org.nova.desktop
+SingleClick=false
+[Icons]
+Theme=breeze-dark

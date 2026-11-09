@@ -1,0 +1,18 @@
+#!/bin/sh
+set -eu
+lb config noauto \
+ --mode debian --distribution trixie --architectures amd64 \
+ --binary-images iso-hybrid --bootloaders "syslinux,grub-efi" \
+ --archive-areas "main contrib non-free non-free-firmware" \
+ --debian-installer none --apt-recommends true \
+ --linux-flavours amd64 --security true --updates true \
+ --mirror-bootstrap https://deb.debian.org/debian \
+ --mirror-chroot https://deb.debian.org/debian \
+ --mirror-binary https://deb.debian.org/debian \
+ --mirror-chroot-security https://security.debian.org/debian-security \
+ --mirror-binary-security https://security.debian.org/debian-security \
+ --iso-application "Nova OS" --iso-publisher "Nova OS Project" \
+ --iso-volume "NOVA_OS_0_1" --image-name nova-os-0.1 \
+ --memtest none --checksums sha256 \
+ --bootappend-live "boot=live components hostname=nova username=nova locales=ja_JP.UTF-8 keyboard-layouts=jp timezone=Asia/Tokyo console=tty0 console=ttyS0,115200" \
+ "$@"

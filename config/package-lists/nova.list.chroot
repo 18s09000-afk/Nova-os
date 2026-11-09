@@ -1,0 +1,39 @@
+# Core live system
+linux-image-amd64
+live-boot
+live-config
+live-config-systemd
+systemd-sysv
+sudo
+locales
+# Plasma 6, Wayland session and applications
+kde-plasma-desktop
+sddm
+kde-config-sddm
+breeze
+breeze-gtk-theme
+kwin-wayland
+xwayland
+konsole
+dolphin
+firefox-esr
+firefox-esr-l10n-ja
+# Networking, audio, removable media
+network-manager
+plasma-nm
+pipewire-audio
+wireplumber
+udisks2
+# Japanese fonts, translation and input
+fonts-noto-cjk
+fonts-noto-color-emoji
+fcitx5
+fcitx5-mozc
+fcitx5-config-qt
+fcitx5-frontend-qt6
+fcitx5-frontend-gtk3
+im-config
+# Common PC firmware, not proprietary NVIDIA driver
+firmware-linux
+firmware-iwlwifi
+firmware-realtek

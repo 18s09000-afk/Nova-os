@@ -1,0 +1,8 @@
+[kdeglobals][General]
+ColorScheme=NovaDark
+[kdeglobals][Icons]
+Theme=breeze-dark
+[plasmarc][Theme]
+name=breeze-dark
+[Wallpaper]
+Image=Nova

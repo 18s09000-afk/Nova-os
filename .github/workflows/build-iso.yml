@@ -1,0 +1,60 @@
+name: Build Nova OS Live ISO
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'auto/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/build-iso.yml'
+  pull_request:
+    paths:
+      - 'auto/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - '.github/workflows/build-iso.yml'
+permissions:
+  contents: read
+concurrency:
+  group: nova-iso-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  live-iso:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check available storage
+        run: |
+          df -h .
+          free -h
+          test "$(df --output=avail -k . | tail -1)" -ge 20971520
+      - name: Start Debian 13 build container
+        run: |
+          docker run -d --name nova-build --privileged \
+            --mount type=bind,src="$GITHUB_WORKSPACE",dst=/src \
+            -w /src debian:trixie-slim sleep infinity
+      - name: Install signed Debian build tools
+        run: docker exec nova-build ./scripts/install-build-deps.sh
+      - name: Validate live-build configuration and packages
+        run: docker exec nova-build ./scripts/validate.sh
+      - name: Build live ISO
+        run: docker exec -e NOVA_JOBS=2 nova-build ./scripts/build.sh
+      - name: UEFI QEMU smoke test (TCG, no host disks)
+        timeout-minutes: 20
+        run: docker exec nova-build python3 scripts/smoke-boot.py --timeout 1000
+      - name: Upload ISO, checksum and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova-os-0.1-amd64-${{ github.run_number }}
+          path: dist/
+          if-no-files-found: warn
+          compression-level: 0
+          retention-days: 14
+      - name: Stop build container
+        if: always()
+        run: docker rm -f nova-build || true

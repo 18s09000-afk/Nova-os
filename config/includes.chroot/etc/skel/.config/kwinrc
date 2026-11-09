@@ -1,0 +1,8 @@
+[Compositing]
+AnimationSpeed=0.25
+[Plugins]
+blurEnabled=false
+wobblywindowsEnabled=false
+[Wayland]
+InputMethod[$e]=/usr/share/applications/org.fcitx.Fcitx5.desktop
+VirtualKeyboardEnabled=true

@@ -1,0 +1,27 @@
+[General]
+Name=Nova Dark
+ColorScheme=NovaDark
+[Colors:Window]
+BackgroundNormal=10,15,27
+ForegroundNormal=226,239,250
+[Colors:View]
+BackgroundNormal=15,23,38
+BackgroundAlternate=20,31,48
+ForegroundNormal=226,239,250
+[Colors:Button]
+BackgroundNormal=24,38,55
+ForegroundNormal=226,239,250
+[Colors:Selection]
+BackgroundNormal=0,201,221
+ForegroundNormal=5,15,23
+[Colors:Tooltip]
+BackgroundNormal=24,38,55
+ForegroundNormal=226,239,250
+[Colors:Complementary]
+BackgroundNormal=10,15,27
+ForegroundNormal=226,239,250
+[WM]
+activeBackground=10,15,27
+activeForeground=226,239,250
+inactiveBackground=15,23,38
+inactiveForeground=130,152,175

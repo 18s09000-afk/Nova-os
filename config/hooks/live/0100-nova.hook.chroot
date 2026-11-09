@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+# Keep Debian compatibility identifiers; expose Nova branding in the desktop.
+sed -i 's/^NAME=.*/NAME="Nova OS"/;s/^PRETTY_NAME=.*/PRETTY_NAME="Nova OS 0.1 (Debian 13)"/' /etc/os-release
+cat >> /etc/os-release <<'EOF'
+VARIANT="Nova OS"
+VARIANT_ID=nova
+NOVA_VERSION=0.1
+EOF
+printf '%s\n' 'Nova OS 0.1 (Debian 13)' > /etc/issue
+printf 'Nova OS 0.1\n' > /etc/issue.net
+sed -i 's/^# *ja_JP.UTF-8 UTF-8/ja_JP.UTF-8 UTF-8/' /etc/locale.gen
+locale-gen
+update-locale LANG=ja_JP.UTF-8
+systemctl enable sddm.service NetworkManager.service
+# Record the actual package set; rolling Debian mirrors are not byte-for-byte reproducible.
+mkdir -p /usr/share/nova
+dpkg-query -W -f='${Package}\t${Version}\n' > /usr/share/nova/packages.tsv
+install -d /opt/nova/apps /opt/nova/shared /usr/share/nova /var/lib/nova
