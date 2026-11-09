@@ -1,0 +1,172 @@
+    ] Job live-config.service/start running (50s / no limit)
+M[**    ] Job live-config.service/start running (50s / no limit)
+M[***   ] Job live-config.service/start running (51s / no limit)
+M[ ***  ] Job live-config.service/start running (51s / no limit)
+M[  *** ] Job live-config.service/start running (52s / no limit)
+M[  OK  ] Finished live-config.service - liv…the boot process (late userspace)..
+[  OK  ] Reached target basic.target - Basic System.
+         Starting accounts-daemon.service - Accounts Service...
+[  OK  ] Started cron.service - Regular background program processing daemon.
+         Starting dbus.service - D-Bus System Message Bus...
+         Starting e2scrub_reap.service - Re…ne ext4 Metadata Check Snapshots...
+         Starting polkit.service - Authorization Manager...
+         Starting switcheroo-control.servic…Switcheroo Control Proxy service...
+         Starting systemd-logind.service - User Login Management...
+         Starting udisks2.service - Disk Manager...
+[  OK  ] Started dbus.service - D-Bus System Message Bus.
+         Starting NetworkManager.service - Network Manager...
+         Starting wpa_supplicant.service - WPA supplicant...
+[  OK  ] Finished e2scrub_reap.service - Re…line ext4 Metadata Check Snapshots.
+[  OK  ] Started switcheroo-control.service - Switcheroo Control Proxy service.
+[  OK  ] Started systemd-logind.service - User Login Management.
+[  OK  ] Started wpa_supplicant.service - WPA supplicant.
+[  OK  ] Started polkit.service - Authorization Manager.
+         Starting ModemManager.service - Modem Manager...
+[  OK  ] Started accounts-daemon.service - Accounts Service.
+         Starting systemd-hostnamed.service - Hostname Service...
+[  OK  ] Started udisks2.service - Disk Manager.
+[  OK  ] Started systemd-hostnamed.service - Hostname Service.
+[   83.223483] NET: Registered PF_QIPCRTR protocol family
+NET: Registered PF_QIPCRTR protocol family
+[  OK  ] Started ModemManager.service - Modem Manager.
+[  OK  ] Listening on systemd-rfkill.socket…ll Switch Status /dev/rfkill Watch.
+         Starting NetworkManager-dispatcher…anager Script Dispatcher Service...
+[  OK  ] Started NetworkManager.service - Network Manager.
+[  OK  ] Reached target network.target - Network.
+         Starting systemd-user-sessions.service - Permit User Sessions...
+[  OK  ] Started NetworkManager-dispatcher.… Manager Script Dispatcher Service.
+[  OK  ] Finished systemd-user-sessions.service - Permit User Sessions.
+         Starting plymouth-quit-wait.servic…d until boot process finishes up...
+         Starting plymouth-quit.service - Terminate Plymouth Boot Screen...
+[  OK  ] Started sddm.service - Simple Desktop Display Manager.
+]104]104
+Nova OS 0.1 (Debian 13)
+nova login: nova
+パスワード: 
+Login incorrect
+
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+パスワード: login: timed out after 60 seconds]104]104]104if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi
+]104]104]104
+Nova OS 0.1 (Debian 13)
+nova login: if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null && pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; fi

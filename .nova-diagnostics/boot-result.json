@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "phase": "checking SDDM, Plasma shell, Fcitx5 and Nova wallpaper",
+  "firmware": "OVMF UEFI",
+  "accelerator": "TCG",
+  "iso": "nova-os-0.1-amd64.iso",
+  "limitations": [
+    "Secure Boot not tested",
+    "Japanese text entry requires manual verification",
+    "Physical hardware and proprietary NVIDIA drivers not tested"
+  ]
+}

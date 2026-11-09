@@ -1,0 +1,20 @@
+xorriso 1.5.6 : RockRidge filesystem manipulator, libburnia project.
+
+xorriso : NOTE : ISO image bears MBR with  -boot_image any partition_offset=16
+xorriso : NOTE : Loading ISO image tree from LBA 0
+xorriso : UPDATE :     306 nodes read in 1 seconds
+xorriso : NOTE : Detected El-Torito boot information which currently is set to be discarded
+Drive current: -indev 'nova-os-0.1-amd64.iso'
+Media current: stdio file, overwriteable
+Media status : is written , is appendable
+Boot record  : El Torito , MBR isohybrid cyl-align-on GPT APM
+Media summary: 1 session, 1203048 data blocks, 2350m data, 70.5g free
+Volume id    : 'NOVA_OS_0_1'
+El Torito catalog  : 134  1
+El Torito cat path : /isolinux/boot.cat
+El Torito images   :   N  Pltf  B   Emul  Ld_seg  Hdpt  Ldsiz         LBA
+El Torito boot img :   1  BIOS  y   none  0x0000  0x00      4        1799
+El Torito boot img :   2  UEFI  y   none  0x0000  0x00   6656         135
+El Torito img path :   1  /isolinux/isolinux.bin
+El Torito img opts :   1  boot-info-table isohybrid-suitable
+El Torito img path :   2  /boot/grub/efi.img
