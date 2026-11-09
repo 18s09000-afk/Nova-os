@@ -1,0 +1,169 @@
+ name org.kde.plasmashell was not provided by any .service files
+
+NOVA_DESKTOP_WAIT
+active
+1200 /usr/bin/kwin_wayland_wrapper --xwayland
+1209 /usr/bin/kwin_wayland --wayland-fd 7 --socket wayland-0 --xwayland-fd 8 --xwayland-fd 9 --xwayland-display :0 --xwayland-xauthority /run/user/1000/xauth_EQVllP --xwayland
+1278 /usr/bin/fcitx5
+1375 /usr/bin/plasmashell --no-respawn
+11月 09 14:35:04 nova sddm[1069]: Loaded empty theme configuration
+11月 09 14:35:04 nova sddm[1069]: Xauthority path: "/run/sddm/xauth_zSgBDq"
+11月 09 14:35:04 nova sddm[1069]: Using VT 2
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/local/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Session "/usr/share/wayland-sessions/plasma.desktop" selected, command: "/usr/lib/x86_64-linux-gnu/libexec/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland" for VT 2
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Starting...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Authenticating...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] returning.
+11月 09 14:35:04 nova sddm[1069]: Authentication for user  "nova"  successful
+11月 09 14:35:04 nova sddm-helper[1082]: pam_unix(sddm-autologin:session): session opened for user nova(uid=1000) by nova(uid=0)
+11月 09 14:35:07 nova sddm[1069]: Session started true
+11月 09 14:35:57 nova at-spi-bus-launcher[1326]: dbus-daemon[1326]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=1347 comm="/usr/bin/ksmserver")
+11月 09 14:35:57 nova at-spi-bus-launcher[1326]: dbus-daemon[1326]: Successfully activated service 'org.a11y.atspi.Registry'
+11月 09 14:35:57 nova at-spi-bus-launcher[1380]: SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
+11月 09 14:35:57 nova kwin_wayland_wrapper[1278]: I2026-11-09 14:35:57.571866 addonmanager.cpp:205] Loaded addon mozc
+11月 09 14:35:57 nova kwin_wayland_wrapper[1278]: E2026-11-09 14:35:57.576548 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.DBus.Error.NoReply Method call timed out
+11月 09 14:35:57 nova kwin_wayland_wrapper[1278]: E2026-11-09 14:35:57.602449 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.DBus.Error.NoReply Method call timed out
+11月 09 14:35:57 nova kwin_wayland_wrapper[1278]: E2026-11-09 14:35:57.614958 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.DBus.Error.NoReply Method call timed out
+11月 09 14:35:57 nova kcminit_startup[1225]: Initializing  "/usr/lib/x86_64-linux-gnu/qt6/plugins/plasma/kcms/systemsettings_qwidgets/kcm_kgamma.so"
+11月 09 14:35:57 nova kcminit_startup[1225]: Initializing  "/usr/lib/x86_64-linux-gnu/qt6/plugins/plasma/kcms/systemsettings/kcm_touchpad.so"
+11月 09 14:35:57 nova systemd[1093]: Finished plasma-kcminit-phase1.service - KDE Configuration Module Initialization (Phase 1).
+11月 09 14:35:58 nova systemd[1093]: plasma-kcminit.service: Consumed 2.938s CPU time, 23M memory peak.
+11月 09 14:35:58 nova systemd[1093]: plasma-ksplash.service: start operation timed out. Terminating.
+11月 09 14:35:58 nova systemd[1093]: plasma-ksplash.service: Main process exited, code=killed, status=15/TERM
+11月 09 14:35:58 nova systemd[1093]: plasma-ksplash.service: Failed with result 'timeout'.
+11月 09 14:35:58 nova systemd[1093]: Failed to start plasma-ksplash.service - Splash screen shown during boot.
+11月 09 14:35:58 nova systemd[1093]: plasma-ksplash.service: Consumed 7.226s CPU time, 108.7M memory peak.
+11月 09 14:35:59 nova kded6[1349]: org.kde.colorcorrectlocationupdater: Geolocator stopped
+11月 09 14:36:00 nova sudo[1411]:     nova : TTY=ttyS0 ; PWD=/home/nova ; USER=root ; COMMAND=/usr/bin/journalctl -b -u sddm --no-pager -n 12
+11月 09 14:36:00 nova sudo[1411]: pam_unix(sudo:session): session opened for user root(uid=0) by nova(uid=1000)
+11月 09 14:36:00 nova sudo[1411]: pam_unix(sudo:session): session closed for user root
+nova@nova:~$ ready=1; systemctl is-active --quiet sddm || ready=0; pgrep -u nova -x plasmashell >/dev/null || ready=0; pgrep -u nova -x fcitx5 >/dev/null || ready=0; test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; if [ "$ready" = 1 ]; then busctl --user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s 'print(panels().length)' | grep -Eq '^s "[1-9][0-9]*' || ready=0; fi; if [ "$ready" = 1 ]; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; systemctl is-active sddm; pgrep -a -u nova -f 'plasmashell|kwin_wayland|fcitx5'; sudo journalctl -b -u sddm --no-pager -n 12; journalctl --user -b --no-pager -n 20; fi
+Call failed: Connection timed out
+
+NOVA_DESKTOP_WAIT
+active
+1200 /usr/bin/kwin_wayland_wrapper --xwayland
+1209 /usr/bin/kwin_wayland --wayland-fd 7 --socket wayland-0 --xwayland-fd 8 --xwayland-fd 9 --xwayland-display :0 --xwayland-xauthority /run/user/1000/xauth_EQVllP --xwayland
+1278 /usr/bin/fcitx5
+1375 /usr/bin/plasmashell --no-respawn
+1524 /usr/bin/plasmashell --feedback
+11月 09 14:35:04 nova sddm[1069]: Loaded empty theme configuration
+11月 09 14:35:04 nova sddm[1069]: Xauthority path: "/run/sddm/xauth_zSgBDq"
+11月 09 14:35:04 nova sddm[1069]: Using VT 2
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/local/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Session "/usr/share/wayland-sessions/plasma.desktop" selected, command: "/usr/lib/x86_64-linux-gnu/libexec/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland" for VT 2
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Starting...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Authenticating...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] returning.
+11月 09 14:35:04 nova sddm[1069]: Authentication for user  "nova"  successful
+11月 09 14:35:04 nova sddm-helper[1082]: pam_unix(sddm-autologin:session): session opened for user nova(uid=1000) by nova(uid=0)
+11月 09 14:35:07 nova sddm[1069]: Session started true
+11月 09 14:36:23 nova polkit-kde-authentication-agent-1[1447]: pci id for fd 16: 1234:1111, driver (null)
+11月 09 14:36:23 nova polkit-kde-authentication-agent-1[1447]: kmsro: driver missing
+11月 09 14:36:23 nova polkit-kde-authentication-agent-1[1447]: libEGL warning: egl: failed to create dri2 screen
+11月 09 14:36:24 nova polkit-kde-authentication-agent-1[1447]: pci id for fd 16: 1234:1111, driver (null)
+11月 09 14:36:24 nova polkit-kde-authentication-agent-1[1447]: kmsro: driver missing
+11月 09 14:36:24 nova polkit-kde-authentication-agent-1[1447]: libEGL warning: egl: failed to create dri2 screen
+11月 09 14:36:25 nova org_kde_powerdevil[1448]: Initializing libddcutil.  ddcutil version: 2.2.0-dev, shared library: /usr/lib/x86_64-linux-gnu/libddcutil.so.5.2.0
+11月 09 14:36:25 nova org_kde_powerdevil[1448]: [  1448] Options passed from client:
+11月 09 14:36:25 nova org_kde_powerdevil[1448]: [  1448] Applying combined libddcutil options:
+11月 09 14:36:25 nova org_kde_powerdevil[1448]: Library initialization complete.
+11月 09 14:36:26 nova org_kde_powerdevil[1448]: [  1448] Watching for display connection changes, resolved watch mode = Watch_Mode_Xevent, poll loop interval = 100 millisec
+11月 09 14:36:26 nova org_kde_powerdevil[1448]: [  1448]                                          extra_stabilization_millisec: 0,  stabilization_poll_millisec: 100
+11月 09 14:36:26 nova org_kde_powerdevil[1448]: [  1448] libddcutil recheck thread (nil) started
+11月 09 14:36:26 nova org_kde_powerdevil[1448]: [  1448] libddcutil watch thread 0x55d85286ce60 started
+11月 09 14:36:26 nova org_kde_powerdevil[1448]: [  1560] (dw_recheck_displays_func) Recheck interval: Slept for 200 millisec
+11月 09 14:36:29 nova org_kde_powerdevil[1448]: org.kde.powerdevil: org.kde.powerdevil.chargethresholdhelper.getthreshold failed "Charge thresholds are not supported by the kernel for this hardware"
+11月 09 14:36:29 nova org_kde_powerdevil[1448]: org.kde.powerdevil: org.kde.powerdevil.backlighthelper.brightness failed
+11月 09 14:36:30 nova sudo[1604]:     nova : TTY=ttyS0 ; PWD=/home/nova ; USER=root ; COMMAND=/usr/bin/journalctl -b -u sddm --no-pager -n 12
+11月 09 14:36:30 nova sudo[1604]: pam_unix(sudo:session): session opened for user root(uid=0) by nova(uid=1000)
+11月 09 14:36:30 nova sudo[1604]: pam_unix(sudo:session): session closed for user root
+nova@nova:~$ ready=1; systemctl is-active --quiet sddm || ready=0; pgrep -u nova -x plasmashell >/dev/null || ready=0; pgrep -u nova -x fcitx5 >/dev/null || ready=0; test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; if [ "$ready" = 1 ]; then busctl --user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s 'print(panels().length)' | grep -Eq '^s "[1-9][0-9]*' || ready=0; fi; if [ "$ready" = 1 ]; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; systemctl is-active sddm; pgrep -a -u nova -f 'plasmashell|kwin_wayland|fcitx5'; sudo journalctl -b -u sddm --no-pager -n 12; journalctl --user -b --no-pager -n 20; fi
+Call failed: Connection timed out
+
+NOVA_DESKTOP_WAIT
+active
+1200 /usr/bin/kwin_wayland_wrapper --xwayland
+1209 /usr/bin/kwin_wayland --wayland-fd 7 --socket wayland-0 --xwayland-fd 8 --xwayland-fd 9 --xwayland-display :0 --xwayland-xauthority /run/user/1000/xauth_EQVllP --xwayland
+1278 /usr/bin/fcitx5
+1375 /usr/bin/plasmashell --no-respawn
+1524 [plasmashell] <defunct>
+11月 09 14:35:04 nova sddm[1069]: Loaded empty theme configuration
+11月 09 14:35:04 nova sddm[1069]: Xauthority path: "/run/sddm/xauth_zSgBDq"
+11月 09 14:35:04 nova sddm[1069]: Using VT 2
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/local/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Session "/usr/share/wayland-sessions/plasma.desktop" selected, command: "/usr/lib/x86_64-linux-gnu/libexec/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland" for VT 2
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Starting...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Authenticating...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] returning.
+11月 09 14:35:04 nova sddm[1069]: Authentication for user  "nova"  successful
+11月 09 14:35:04 nova sddm-helper[1082]: pam_unix(sddm-autologin:session): session opened for user nova(uid=1000) by nova(uid=0)
+11月 09 14:35:07 nova sddm[1069]: Session started true
+11月 09 14:36:38 nova systemd[1093]: Started app-org.kde.discover.notifier@autostart.service - Discover.
+11月 09 14:36:38 nova xdg-desktop-portal-kde[1449]: xdp-kde-settings: Namespace  "org.gnome.desktop.interface"  is not supported
+11月 09 14:36:38 nova xdg-desktop-portal-kde[1449]: xdp-kde-settings: Namespace  "org.gnome.desktop.interface"  is not supported
+11月 09 14:36:38 nova xdg-desktop-portal-kde[1449]: xdp-kde-settings: Namespace  "org.gnome.desktop.interface"  is not supported
+11月 09 14:36:38 nova xdg-desktop-portal-kde[1449]: xdp-kde-settings: Namespace  "org.gnome.desktop.interface"  is not supported
+11月 09 14:36:38 nova systemd[1093]: Started app-xdg\x2duser\x2ddirs@autostart.service - User folders update.
+11月 09 14:36:38 nova xdg-desktop-portal-kde[1449]: xdp-kde-settings: Namespace  "org.gnome.desktop.interface"  is not supported
+11月 09 14:36:38 nova xdg-desktop-portal-kde[1449]: xdp-kde-settings: Namespace  "org.gnome.desktop.interface"  is not supported
+11月 09 14:36:38 nova plasmashell[1375]: file:///usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/ui/main.qml:310:13: QML Image: Cannot open: file:///usr/share/plasma/plasmoids/org.kde.plasma.kickoff/contents/ui/start-here-kde-symbolic
+11月 09 14:36:38 nova kwin_wayland_wrapper[1278]: E2026-11-09 14:36:38.892874 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.portal.Error.NotFound 要求された設定が見つかりませんでした
+11月 09 14:36:38 nova kwin_wayland_wrapper[1278]: E2026-11-09 14:36:38.919989 portalsettingmonitor.cpp:121] DBus call error: org.freedesktop.portal.Error.NotFound 要求された設定が見つかりませんでした
+11月 09 14:36:39 nova systemd[1093]: app-konqy_preload@autostart.service: Skipped due to 'exec-condition'.
+11月 09 14:36:39 nova systemd[1093]: Condition check resulted in app-konqy_preload@autostart.service - Konqueror preloading during desktop environment startup being skipped.
+11月 09 14:36:39 nova plasmashell[1375]: org.kde.plasma.kicker: Entry is not valid "org.kde.kontact.desktop" 0x557c03d56270
+11月 09 14:36:40 nova xembedsniproxy[1450]: kde.xembedsniproxy: could not register SNI: "Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken."
+11月 09 14:36:40 nova systemd[1093]: Started app-kup\x2ddaemon@autostart.service - Kup.
+11月 09 14:36:40 nova systemd[1093]: Reached target xdg-desktop-autostart.target - Startup of XDG autostart applications.
+11月 09 14:36:50 nova sudo[1778]:     nova : TTY=ttyS0 ; PWD=/home/nova ; USER=root ; COMMAND=/usr/bin/journalctl -b -u sddm --no-pager -n 12
+11月 09 14:36:50 nova sudo[1778]: pam_unix(sudo:session): session opened for user root(uid=0) by nova(uid=1000)
+11月 09 14:36:51 nova sudo[1778]: pam_unix(sudo:session): session closed for user root
+nova@nova:~$ ready=1; systemctl is-active --quiet sddm || ready=0; pgrep -u nova -x plasmashell >/dev/null || ready=0; pgrep -u nova -x fcitx5 >/dev/null || ready=0; test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; if [ "$ready" = 1 ]; then busctl --user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s 'print(panels().length)' | grep -Eq '^s "[1-9][0-9]*' || ready=0; fi; if [ "$ready" = 1 ]; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; systemctl is-active sddm; pgrep -a -u nova -f 'plasmashell|kwin_wayland|fcitx5'; sudo journalctl -b -u sddm --no-pager -n 12; journalctl --user -b --no-pager -n 20; fi
+Call failed: Connection timed out
+
+NOVA_DESKTOP_WAIT
+active
+1200 /usr/bin/kwin_wayland_wrapper --xwayland
+1209 /usr/bin/kwin_wayland --wayland-fd 7 --socket wayland-0 --xwayland-fd 8 --xwayland-fd 9 --xwayland-display :0 --xwayland-xauthority /run/user/1000/xauth_EQVllP --xwayland
+1278 /usr/bin/fcitx5
+1375 /usr/bin/plasmashell --no-respawn
+1524 [plasmashell] <defunct>
+11月 09 14:35:04 nova sddm[1069]: Loaded empty theme configuration
+11月 09 14:35:04 nova sddm[1069]: Xauthority path: "/run/sddm/xauth_zSgBDq"
+11月 09 14:35:04 nova sddm[1069]: Using VT 2
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/local/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Reading from "/usr/share/wayland-sessions/plasma.desktop"
+11月 09 14:35:04 nova sddm[1069]: Session "/usr/share/wayland-sessions/plasma.desktop" selected, command: "/usr/lib/x86_64-linux-gnu/libexec/plasma-dbus-run-session-if-needed /usr/bin/startplasma-wayland" for VT 2
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Starting...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] Authenticating...
+11月 09 14:35:04 nova sddm-helper[1082]: [PAM] returning.
+11月 09 14:35:04 nova sddm[1069]: Authentication for user  "nova"  successful
+11月 09 14:35:04 nova sddm-helper[1082]: pam_unix(sddm-autologin:session): session opened for user nova(uid=1000) by nova(uid=0)
+11月 09 14:35:07 nova sddm[1069]: Session started true
+11月 09 14:36:59 nova kup-daemon[1715]: libEGL warning: egl: failed to create dri2 screen
+11月 09 14:37:00 nova kded6[1349]: org.kde.pulseaudio: No object for name "auto_null.monitor"
+11月 09 14:37:01 nova obexd[1851]: OBEX daemon 5.82
+11月 09 14:37:01 nova dbus-daemon[1117]: [session uid=1000 pid=1117 pidfd=5] Successfully activated service 'org.bluez.obex'
+11月 09 14:37:01 nova systemd[1093]: Started obex.service - Bluetooth OBEX service.
+11月 09 14:37:01 nova dbus-daemon[1117]: [session uid=1000 pid=1117 pidfd=5] Activating via systemd: service name='org.gnome.evolution.dataserver.Sources5' unit='evolution-source-registry.service' requested by ':1.104' (uid=1000 pid=1851 comm="/usr/libexec/bluetooth/obexd")
+11月 09 14:37:01 nova dbus-daemon[1117]: [session uid=1000 pid=1117 pidfd=5] Activation via systemd failed for unit 'evolution-source-registry.service': Unit evolution-source-registry.service not found.
+11月 09 14:37:01 nova obexd[1851]: Unable to acquire registry: Error calling StartServiceByName for org.gnome.evolution.dataserver.Sources5: Unit evolution-source-registry.service not found.
+11月 09 14:37:01 nova dbus-daemon[1117]: [session uid=1000 pid=1117 pidfd=5] Activating via systemd: service name='org.gnome.evolution.dataserver.Sources5' unit='evolution-source-registry.service' requested by ':1.104' (uid=1000 pid=1851 comm="/usr/libexec/bluetooth/obexd")
+11月 09 14:37:01 nova dbus-daemon[1117]: [session uid=1000 pid=1117 pidfd=5] Activation via systemd failed for unit 'evolution-source-registry.service': Unit evolution-source-registry.service not found.
+11月 09 14:37:01 nova obexd[1851]: Unable to acquire registry: Error calling StartServiceByName for org.gnome.evolution.dataserver.Sources5: Unit evolution-source-registry.service not found.
+11月 09 14:37:01 nova dbus-daemon[1117]: [session uid=1000 pid=1117 pidfd=5] Successfully activated service 'org.kde.kdeconnect'
+11月 09 14:37:02 nova systemd[1093]: app-org.kde.plasma\x2dfallback\x2dsession\x2drestore@autostart.service: Consumed 2.747s CPU time, 33.8M memory peak.
+11月 09 14:37:04 nova kwin_wayland_wrapper[1209]: kf.windowsystem: static bool KX11Extras::mapViewport() may only be used on X11
+11月 09 14:37:04 nova kded6[1349]: Registering ":1.106/StatusNotifierItem" to system tray
+11月 09 14:37:05 nova kup-daemon[1715]: kup.daemon: "Kup is not enabled, enable it from the system settings module. You can do that by running kcmshell5 kup"
+11月 09 14:37:07 nova systemd[1093]: app-kup\x2ddaemon@autostart.service: Consumed 3.127s CPU time, 34.1M memory peak.
+11月 09 14:37:11 nova sudo[1890]:     nova : TTY=ttyS0 ; PWD=/home/nova ; USER=root ; COMMAND=/usr/bin/journalctl -b -u sddm --no-pager -n 12
+11月 09 14:37:11 nova sudo[1890]: pam_unix(sudo:session): session opened for user root(uid=0) by nova(uid=1000)
+11月 09 14:37:11 nova sudo[1890]: pam_unix(sudo:session): session closed for user root
+nova@nova:~$ ready=1; systemctl is-active --quiet sddm || ready=0; pgrep -u nova -x plasmashell >/dev/null || ready=0; pgrep -u nova -x fcitx5 >/dev/null || ready=0; test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; if [ "$ready" = 1 ]; then busctl --user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s 'print(panels().length)' | grep -Eq '^s "[1-9][0-9]*' || ready=0; fi; if [ "$ready" = 1 ]; then printf '\n%s%s\n' NOVA_ DESKTOP_READY; else printf '\n%s%s\n' NOVA_ DESKTOP_WAIT; systemctl is-active sddm; pgrep -a -u nova -f 'plasmashell|kwin_wayland|fcitx5'; sudo journalctl -b -u sddm --no-pager -n 12; journalctl --user -b --no-pager -n 20; fi
+
+NOVA_DESKTOP_READY

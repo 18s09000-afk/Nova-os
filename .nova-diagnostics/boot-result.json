@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "phase": "live desktop D-Bus response, panel, processes and wallpaper verified",
+  "firmware": "OVMF UEFI",
+  "accelerator": "TCG",
+  "vga": "std",
+  "iso": "nova-os-0.1-amd64.iso",
+  "limitations": [
+    "Secure Boot not tested",
+    "Japanese text entry requires manual verification",
+    "Physical hardware and proprietary NVIDIA drivers not tested"
+  ]
+}
