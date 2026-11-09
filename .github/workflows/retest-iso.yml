@@ -1,0 +1,95 @@
+name: Retest existing Nova ISO
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Source Build Nova OS Live ISO run ID
+        required: true
+        type: string
+  push:
+    branches: ['ci-retest/**']
+permissions:
+  contents: write
+  actions: read
+jobs:
+  boot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve existing ISO artifact
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_RUN: ${{ inputs.run_id }}
+        run: |
+          run_id="$REQUESTED_RUN"
+          if [ -z "$run_id" ]; then run_id=${GITHUB_REF_NAME#ci-retest/}; fi
+          [[ "$run_id" =~ ^[0-9]+$ ]] || exit 1
+          name=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/artifacts" --jq '[.artifacts[] | select(.expired == false and (.name | startswith("nova-os-0.1-amd64-")))][0].name')
+          [[ "$name" == nova-os-0.1-amd64-* ]] || exit 1
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.source.outputs.run_id }}
+          name: ${{ steps.source.outputs.name }}
+          path: cached-iso
+      - name: Verify original ISO checksum
+        env:
+          SOURCE_RUN: ${{ steps.source.outputs.run_id }}
+        run: |
+          mkdir -p dist
+          printf '%s\n' "$SOURCE_RUN" > dist/source-run.txt
+          git rev-parse HEAD > dist/test-source-sha.txt
+          (cd cached-iso && sha256sum -c nova-os-0.1-amd64.iso.sha256) | tee dist/iso-verification.log
+      - name: Prepare Debian QEMU environment
+        run: |
+          docker run -d --name nova-retest --privileged \
+            --mount type=bind,src="$GITHUB_WORKSPACE",dst=/src \
+            -w /src debian:trixie-slim sleep infinity
+          docker exec nova-retest ./scripts/install-build-deps.sh
+      - name: Boot the existing ISO (no rebuild)
+        timeout-minutes: 20
+        run: docker exec nova-retest python3 scripts/smoke-boot.py --iso /src/cached-iso/nova-os-0.1-amd64.iso --timeout 1000
+      - name: Preserve diagnostics for review
+        if: always()
+        env:
+          SOURCE_RUN: ${{ steps.source.outputs.run_id }}
+        run: |
+          test -f dist/boot-result.json || exit 0
+          mkdir -p .nova-diagnostics
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          for name in ['boot-result.json', 'qemu-stderr.log', 'qemu-serial.log', 'source-run.txt', 'test-source-sha.txt']:
+              p = Path('dist') / name
+              if p.is_file():
+                  with p.open('rb') as f:
+                      f.seek(max(0, p.stat().st_size - 22000))
+                      text = f.read().decode('utf-8', errors='replace')
+                  text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', text)
+                  (Path('.nova-diagnostics') / name).write_text(text)
+          PY
+          if [ -f dist/qemu-desktop.ppm ]; then
+            python3 .github/scripts/ppm-to-png.py dist/qemu-desktop.ppm dist/qemu-desktop.png
+            cp dist/qemu-desktop.png .nova-diagnostics/
+          fi
+          branch="ci-diagnostics/retest-${SOURCE_RUN}-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          git config user.name 'Nova OS CI'
+          git config user.email 'nova-os-ci@users.noreply.github.com'
+          git add -f -- .nova-diagnostics
+          git commit -m "Record ISO retest for build $SOURCE_RUN"
+          git push origin "HEAD:refs/heads/$branch"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nova-os-boot-retest-${{ github.run_number }}
+          path: dist/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Stop test container
+        if: always()
+        run: docker rm -f nova-retest || true

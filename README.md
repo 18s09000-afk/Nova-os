@@ -120,3 +120,15 @@ Mozcで「日本語」の入力、再起動後のLiveデスクトップ。
 Secure Bootは未対応・未検証です。UEFIテストはSecure Boot無効で行います。
 RTX 3060用の専用NVIDIAドライバーや実機固有のWi-Fi・サスペンド・ゲーム性能は未検証です。
 USB書き込み・SSD変更・実機インストールの処理は、このリポジトリにはありません。
+
+## ISOを再ビルドせず起動テストを再実行する
+
+Actionsの **Retest existing Nova ISO → Run workflow** に、元のビルドURLの実行IDを入力します。
+例：`.../actions/runs/42564094145` の場合は `42564094145`。
+保存済みISOのSHA-256を検証してから、現在のテストコードでQEMUを起動します。
+小さな検証用Artifactsには結果・ログ・PNG画面が入り、ISOは元のビルドのArtifactsから取得します。
+元のArtifactsが有効であることが必要です。
+
+診断結果は `ci-diagnostics/` で始まる専用ブランチにも自動保存します。
+通常のOSソースは `main` にあります。診断ブランチは生成物の確認用です。
+Codexからは `ci-retest/<元のビルド実行ID>` ブランチへのpushでも再検証できます。
