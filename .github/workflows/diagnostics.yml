@@ -90,6 +90,9 @@ jobs:
           git switch -c "$branch"
           git config user.name 'Nova OS CI'
           git config user.email 'nova-os-ci@users.noreply.github.com'
-          git add -- .nova-diagnostics
+          if [ -f diagnostics/qemu-desktop.ppm ]; then
+            python3 .github/scripts/ppm-to-png.py diagnostics/qemu-desktop.ppm .nova-diagnostics/qemu-desktop.png
+          fi
+          git add -f -- .nova-diagnostics
           git commit -m "Record boot diagnostics for build $SOURCE_RUN"
           git push origin "HEAD:refs/heads/$branch"
