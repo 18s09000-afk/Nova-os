@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 p = argparse.ArgumentParser()
 p.add_argument('--iso', type=Path, default=ROOT/'dist/nova-os-0.1-amd64.iso')
 p.add_argument('--timeout', type=int, default=1000)
+p.add_argument('--settle-seconds', type=float, default=45, help='Wait for the first rendered frame after readiness')
 a = p.parse_args()
 if not a.iso.is_file():
     p.error(f'ISO not found: {a.iso}')
@@ -110,7 +111,7 @@ with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
                 if re.search(rb'\r?\nNOVA_DESKTOP_READY\r?\n', buffer):
                     passed = True
                     phase = 'live desktop D-Bus response, panel, processes and wallpaper verified'
-                    time.sleep(45)
+                    time.sleep(a.settle_seconds)
                     break
             # Save a guest framebuffer for visual review on both success and timeout.
             qmp = socket.socket(socket.AF_UNIX)

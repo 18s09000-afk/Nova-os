@@ -40,7 +40,7 @@ with tempfile.TemporaryDirectory() as tmp:
   e=dict(env)
   if fail:e['FAKE_FAIL']='1'
   if japanese:e['FAKE_JA']='1'
-  r=subprocess.run(['python3',str(p/'scripts/smoke-boot.py'),'--iso',str(p/'fixture.iso'),'--timeout','40'],env=e,capture_output=True,text=True,timeout=50)
+  r=subprocess.run(['python3',str(p/'scripts/smoke-boot.py'),'--iso',str(p/'fixture.iso'),'--timeout','40','--settle-seconds','0'],env=e,capture_output=True,text=True,timeout=50)
   data=json.loads((p/'dist/boot-result.json').read_text())
   assert (r.returncode==0)==(not fail),(r.stdout,r.stderr)
   assert data['passed']==(not fail),data
