@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 p = argparse.ArgumentParser()
 p.add_argument('--iso', type=Path, default=ROOT/'dist/nova-os-0.1-amd64.iso')
 p.add_argument('--timeout', type=int, default=1000)
+p.add_argument('--settle-seconds', type=float, default=45, help='Wait for the first rendered frame after readiness')
 a = p.parse_args()
 if not a.iso.is_file():
     p.error(f'ISO not found: {a.iso}')
@@ -25,18 +26,18 @@ out.mkdir(exist_ok=True)
 code = Path(os.environ.get('OVMF_CODE', '/usr/share/OVMF/OVMF_CODE_4M.fd'))
 var = Path(os.environ.get('OVMF_VARS', '/usr/share/OVMF/OVMF_VARS_4M.fd'))
 # Construct the marker at run time: terminal echo of the command cannot pass the test.
-probe = ("ready=1; systemctl is-active --quiet sddm || ready=0; "
-         "pgrep -u nova -x plasmashell >/dev/null || ready=0; "
-         "pgrep -u nova -x fcitx5 >/dev/null || ready=0; "
-         "test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; "
-         "if [ \"$ready\" = 1 ]; then "
-         "busctl --user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell "
-         "evaluateScript s 'print(panels().length)' | grep -Eq '^s \"[1-9][0-9]*' || ready=0; fi; "
-         "if [ \"$ready\" = 1 ]; then printf '\\n%s%s\\n' NOVA_ DESKTOP_READY; "
-         "else printf '\\n%s%s\\n' NOVA_ DESKTOP_WAIT; "
-         "systemctl is-active sddm; pgrep -a -u nova -f 'plasmashell|kwin_wayland|fcitx5'; "
-         "sudo journalctl -b -u sddm --no-pager -n 12; "
-         "journalctl --user -b --no-pager -n 20; fi\n")
+probe = ('ready=1; systemctl is-active --quiet sddm || ready=0; pgrep -u nova -x plasmashell >/dev/null || ready=0; '
+ 'pgrep -u nova -x fcitx5 >/dev/null || ready=0; test -r '
+ '/usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; if [ "$ready" = 1 ]; then busctl '
+ '--user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s '
+ '\'print(panels().length)\' | grep -Eq \'^s "[1-9][0-9]*\' || ready=0; fi; if [ "$ready" = 1 ]; then busctl '
+ "--user --timeout=15 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell evaluateScript s 'var "
+ 'ds=desktops();print("NOVA_WALLPAPER_STATE "+ds.length);for(var '
+ 'i=0;i<ds.length;i++){ds[i].currentConfigGroup=["Wallpaper",ds[i].wallpaperPlugin,"General"];print(ds[i].wallpaperPlugin+" '
+ '"+ds[i].readConfig("Image","unset"));}\'; printf \'\\n%s%s\\n\' NOVA_ DESKTOP_READY; else printf '
+ "'\\n%s%s\\n' NOVA_ DESKTOP_WAIT; systemctl is-active sddm; pgrep -a -u nova -f "
+ "'plasmashell|kwin_wayland|fcitx5'; sudo journalctl -b -u sddm --no-pager -n 12; journalctl --user -b "
+ '--no-pager -n 20; fi\n')
 passed = False
 phase = 'starting QEMU'
 with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
@@ -110,7 +111,7 @@ with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
                 if re.search(rb'\r?\nNOVA_DESKTOP_READY\r?\n', buffer):
                     passed = True
                     phase = 'live desktop D-Bus response, panel, processes and wallpaper verified'
-                    time.sleep(10)
+                    time.sleep(a.settle_seconds)
                     break
             # Save a guest framebuffer for visual review on both success and timeout.
             qmp = socket.socket(socket.AF_UNIX)
