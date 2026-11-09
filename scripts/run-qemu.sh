@@ -17,7 +17,7 @@ accel=tcg
 qemu-system-x86_64 -machine "q35,accel=$accel" -cpu max -m "${NOVA_RAM_MB:-4096}" -smp 2 \
  -drive "if=pflash,format=raw,readonly=on,file=$firmware" \
  -drive "if=pflash,format=raw,file=$run/vars.fd" \
- -cdrom "$iso" -boot d -device virtio-vga -display "${NOVA_DISPLAY:-gtk}" \
+ -cdrom "$iso" -boot d -vga "${NOVA_QEMU_VGA:-std}" -display "${NOVA_DISPLAY:-gtk}" \
  -nic user,model=virtio-net-pci -serial "file:$ROOT/dist/qemu-serial.log" \
  -monitor "unix:$run/monitor.sock,server=on,wait=off" \
  -name 'Nova OS 0.1 — UEFI live test'

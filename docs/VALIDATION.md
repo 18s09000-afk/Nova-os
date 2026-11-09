@@ -51,3 +51,14 @@ Artifactsのアップロードは起動テスト後に行います。
 初回の `boot-result.json` は `waiting for live user login` を記録しました。
 Debian live-buildの標準GRUBテンプレートにはタイムアウト設定がなかったため、
 ISO作成前のbinary hookで5秒後に既定Liveエントリーへ進む設定を追加しました。
+
+## 2回目のISOとテスト側の修正
+
+https://github.com/18s09000-afk/Nova-os/actions/runs/42564094145
+
+ISO生成は成功し、UEFI → Linux → live-config → SDDMサービス開始 → 日本語ログインに到達しました。
+テストコードは日本語の「パスワード:」を認識できず、未認証の端末へ検査コマンドを送っていました。
+画面はvirtio VGA構成で非アクティブだったため、GUI成功とは扱っていません。
+英語・日本語の認証処理、遅れて届くカーネルメッセージ、QEMU早期終了の模擬検査を追加しました。
+標準VGAとPlasmaのD-Bus応答・パネル数を確認するテストで、同じISOを再検証します。
+この変更はホスト側テストだけで、ISO内のファイルは変更しません。

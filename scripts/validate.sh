@@ -2,6 +2,7 @@
 set -euo pipefail
 cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 python3 tests/check_config.py
+python3 tests/test_smoke_protocol.py
 shellcheck auto/config scripts/*.sh config/hooks/live/*.chroot config/hooks/live/*.binary
 bash -n scripts/*.sh
 # Exercise live-build itself outside the source tree.

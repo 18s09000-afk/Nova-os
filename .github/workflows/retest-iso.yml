@@ -52,7 +52,7 @@ jobs:
           docker exec nova-retest ./scripts/install-build-deps.sh
       - name: Boot the existing ISO (no rebuild)
         timeout-minutes: 20
-        run: docker exec nova-retest python3 scripts/smoke-boot.py --iso /src/cached-iso/nova-os-0.1-amd64.iso --timeout 1000
+        run: docker exec nova-retest python3 scripts/smoke-boot.py --iso /src/cached-iso/nova-os-0.1-amd64.iso --timeout 420
       - name: Preserve diagnostics for review
         if: always()
         env:

@@ -25,16 +25,25 @@ out.mkdir(exist_ok=True)
 code = Path(os.environ.get('OVMF_CODE', '/usr/share/OVMF/OVMF_CODE_4M.fd'))
 var = Path(os.environ.get('OVMF_VARS', '/usr/share/OVMF/OVMF_VARS_4M.fd'))
 # Construct the marker at run time: terminal echo of the command cannot pass the test.
-probe = ("if systemctl is-active --quiet sddm && pgrep -u nova -x plasmashell >/dev/null "
-         "&& pgrep -u nova -x fcitx5 >/dev/null && test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png; "
-         "then printf '\\n%s%s\\n' NOVA_ DESKTOP_READY; else printf '\\n%s%s\\n' NOVA_ DESKTOP_WAIT; fi\n")
+probe = ("ready=1; systemctl is-active --quiet sddm || ready=0; "
+         "pgrep -u nova -x plasmashell >/dev/null || ready=0; "
+         "pgrep -u nova -x fcitx5 >/dev/null || ready=0; "
+         "test -r /usr/share/wallpapers/Nova/contents/images/1920x1080.png || ready=0; "
+         "if [ \"$ready\" = 1 ]; then "
+         "busctl --user --timeout=10 call org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell "
+         "evaluateScript s 'print(panels().length)' | grep -Eq '^s \"[1-9][0-9]*' || ready=0; fi; "
+         "if [ \"$ready\" = 1 ]; then printf '\\n%s%s\\n' NOVA_ DESKTOP_READY; "
+         "else printf '\\n%s%s\\n' NOVA_ DESKTOP_WAIT; "
+         "systemctl is-active sddm; pgrep -a -u nova -f 'plasmashell|kwin_wayland|fcitx5'; "
+         "sudo journalctl -b -u sddm --no-pager -n 12; "
+         "journalctl --user -b --no-pager -n 20; fi\n")
 passed = False
 phase = 'starting QEMU'
 with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
     d = Path(d)
     shutil.copy(var, d/'vars.fd')
     command = ['qemu-system-x86_64', '-machine', 'q35,accel=tcg', '-cpu', 'max',
-               '-m', '4096', '-smp', '2', '-display', 'none', '-device', 'virtio-vga',
+               '-m', '4096', '-smp', '2', '-display', 'none', '-vga', os.environ.get('NOVA_QEMU_VGA', 'std'),
                '-drive', f'if=pflash,format=raw,readonly=on,file={code}',
                '-drive', f'if=pflash,format=raw,file={d}/vars.fd',
                '-cdrom', str(a.iso.resolve()), '-boot', 'd', '-nic', 'none',
@@ -60,6 +69,8 @@ with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
             sent_login = False
             sent_password = False
             next_probe = float('inf')
+            authenticated = False
+            attempts = 0
             while time.monotonic()-start < a.timeout:
                 if process.poll() is not None:
                     raise RuntimeError('Guest exited unexpectedly')
@@ -71,26 +82,35 @@ with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
                     log.write(data)
                     log.flush()
                     buffer = (buffer+data)[-65536:]
-                if not sent_login and re.search(rb'login:\s*$', buffer):
+                # Match translated prompts and ignore interleaved kernel/status messages.
+                plain = re.sub(rb'\x1b\[[0-?]*[ -/]*[@-~]', b'', buffer).decode('utf-8', errors='replace')
+                if not authenticated and re.search(r'(?im)(?:^|[\r\n])[^\r\n]{0,80}(?:login|ログイン):\s*', plain):
+                    attempts += 1
+                    if attempts > 3:
+                        raise RuntimeError('Live login failed after three attempts')
                     serial.sendall(b'nova\n')
                     sent_login = True
-                    next_probe = time.monotonic()+20
+                    sent_password = False
                     buffer = b''
-                if sent_login and not sent_password and re.search(rb'(?i)password:\s*$', buffer):
+                    phase = 'waiting for live password prompt'
+                elif sent_login and not sent_password and re.search(r'(?i)(?:password|パスワード):\s*', plain):
                     serial.sendall(b'live\n')
                     sent_password = True
                     buffer = b''
+                    phase = 'waiting for authenticated live shell'
+                elif not authenticated and re.search(r'nova@[^\r\n]*[#$]', plain):
+                    authenticated = True
                     next_probe = time.monotonic()+10
-                if b'nova@nova' in buffer and not sent_login:
-                    sent_login = True
-                    next_probe = time.monotonic()+10
+                    buffer = b''
+                    phase = 'live shell authenticated'
                 if time.monotonic() >= next_probe:
                     serial.sendall(probe.encode())
                     phase = 'checking SDDM, Plasma shell, Fcitx5 and Nova wallpaper'
                     next_probe = time.monotonic()+20
                 if re.search(rb'\r?\nNOVA_DESKTOP_READY\r?\n', buffer):
                     passed = True
-                    phase = 'live desktop processes and wallpaper verified'
+                    phase = 'live desktop D-Bus response, panel, processes and wallpaper verified'
+                    time.sleep(10)
                     break
             # Save a guest framebuffer for visual review on both success and timeout.
             qmp = socket.socket(socket.AF_UNIX)
@@ -123,7 +143,7 @@ with tempfile.TemporaryDirectory(prefix='nova-boot-') as d:
                     process.kill()
                     process.wait()
             result = {'passed': passed, 'phase': phase, 'firmware': 'OVMF UEFI',
-                      'accelerator': 'TCG', 'iso': a.iso.name,
+                      'accelerator': 'TCG', 'vga': os.environ.get('NOVA_QEMU_VGA', 'std'), 'iso': a.iso.name,
                       'limitations': ['Secure Boot not tested', 'Japanese text entry requires manual verification',
                                       'Physical hardware and proprietary NVIDIA drivers not tested']}
             (out/'boot-result.json').write_text(json.dumps(result, indent=2)+'\n')
