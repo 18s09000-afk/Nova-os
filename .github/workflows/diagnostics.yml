@@ -1,0 +1,62 @@
+name: Summarize Nova boot diagnostics
+on:
+  workflow_run:
+    workflows: [Build Nova OS Live ISO]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Build Nova OS Live ISO run ID
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnostics:
+    # Read artifacts only from this repository's trusted main build.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.head_repository.full_name == github.repository &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.event != 'pull_request')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: ${{ inputs.run_id || github.event.workflow_run.id }}
+          pattern: nova-os-0.1-amd64-*
+          merge-multiple: true
+          path: diagnostics
+      - name: Show boot result and diagnostic log tails
+        if: always()
+        env:
+          SOURCE_RUN: ${{ inputs.run_id || github.event.workflow_run.id }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+          root = Path('diagnostics')
+          names = ['boot-result.json', 'qemu-stderr.log', 'qemu-serial.log', 'boot-catalog.txt', 'build.log']
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write('# Nova OS build diagnostics\n\n')
+              summary.write('Source run: ' + os.environ['SOURCE_RUN'] + '\n\n')
+              summary.write('Download the ISO and full logs from the source run Artifacts.\n\n')
+              for name in names:
+                  path = root / name
+                  summary.write('## ' + name + '\n\n')
+                  if not path.is_file():
+                      summary.write('Not produced. Check the source run steps.\n\n')
+                      continue
+                  # Bound output without loading large logs or executing their contents.
+                  with path.open('rb') as stream:
+                      stream.seek(max(0, path.stat().st_size - 22000))
+                      text = stream.read().decode('utf-8', errors='replace')
+                  text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', text)
+                  text = text.replace('```', "'''")
+                  summary.write('```text\n' + text + '\n```\n\n')
+          PY
