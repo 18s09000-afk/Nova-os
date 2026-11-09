@@ -1,64 +1,56 @@
 # 検証記録
 
-2026-11-09 / Codex Cloud / Debian 13 amd64
+2026-11-09 / GitHub Actions / Debian 13 amd64 / QEMU + OVMF UEFI + TCG / 標準VGA
 
-| 項目 | 結果 |
+**`nova-os-0.1-amd64.iso` を生成し、Liveデスクトップへの起動を確認しました。**
+
+## 取得先と検証の対応
+
+- ISO生成：[実行42564094145](https://github.com/18s09000-afk/Nova-os/actions/runs/42564094145)
+- Artifacts：`nova-os-0.1-amd64-2`、約2.3GB、ISOとSHA-256ファイルを収録
+- 最新の成功した再検証：[実行42569015731](https://github.com/18s09000-afk/Nova-os/actions/runs/42569015731)
+- [起動結果JSON](validation/boot-result.json) / [実際のGUI画面](screenshots/nova-os-0.1-live.png)
+
+再検証では保存済みISOをダウンロードしてSHA-256を照合し、同じファイルを起動しました。
+ISOを再生成・改変していません。検証コードのみ更新しています。
+元のISO生成実行の赤いステータスは、修正前のテストによるものです。
+
+| 検証内容 | 結果 |
 |---|---|
-| オリジナル設定・アートワークの作成 | 完了 |
-| JSON・SVG・PNG構造、34パッケージ名の検査 | 成功 |
-| ShellCheck / シェル構文 | 成功 |
-| live-build 1:20250505+deb13u1 による設定生成 | 成功 |
-| 公式trixie + trixie-securityの依存関係解決 | 成功（インストールシミュレーション） |
-| Plasma 6.3.6 Waylandセッションのファイル名 | Debianパッケージ内容を確認 |
-| Fcitx5仮想キーボード用desktopエントリー | Debianパッケージ内容を確認 |
-| live-build実行 | ベース取得・検証後、debootstrapのマウントで停止 |
-| QEMU 10.0.13 / TCG / OVMF UEFI | ファームウェアのみ起動・QMP応答・画面取得成功 |
-| Nova ISO生成 | GitHub Actionsで成功（初回ビルド約15分30秒） |
-| NovaのUEFI起動・Plasmaプロセス | 初回はログイン未到達でタイムアウト。自動起動設定を追加して再検証中 |
-| 日本語の実入力・アプリ操作・実機起動 | 未検証 |
-| GitHub Actionsでの実行 | ツール導入・設定検査・ISO生成成功。初回起動検査失敗、再検証中 |
+| Debian 13公式パッケージの依存関係解決 | 成功（34指定パッケージと依存関係） |
+| JSON・SVG・PNG構造 / シェル構文 / ShellCheck | 成功 |
+| GRUB / Syslinuxの自動選択設定 | 実行テスト成功、UEFIで5秒後の自動起動も確認 |
+| 英語・日本語のシリアルログインとQEMU早期終了の模擬検査 | 3ケース成功（OS起動とは別のプロトコル検査） |
+| live-buildによるISO生成 | 2回成功 |
+| 元のISOのSHA-256照合 | 成功 |
+| UEFI → Linux → live-config → Liveログイン | 成功 |
+| SDDM / KWin Wayland / Plasma / Fcitx5 | 動作確認 |
+| PlasmaのD-Bus応答 / パネル数 | 成功 |
+| Nova壁紙の選択値 | `org.kde.image` とNovaのPNGパスを確認 |
+| 壁紙・ロゴ・下部パネル・ダーク配色・日本語表示 | QEMU画面を目視確認 |
+| Mozcエンジン | 起動ログのロードとFcitx5プロセスを確認 |
+| 日本語の実入力・変換操作 / 各アプリの操作 | 未検証 |
+| 実機 / Secure Boot / 専用NVIDIAドライバー | 未検証 |
+| Calamares / SSDへのインストール | 未実装・未実行 |
 
-## クラウドで確認した制約
+## 修正した問題
 
-特権フラグ付きrootless Dockerでも `mount -t tmpfs` と `mknod` が拒否されました。
-実際のlive-buildはDebianパッケージの取得・検証後に次で停止しました：
+1. Codex Cloudのrootlessコンテナは、特権フラグ付きでも `mount` と `mknod` が拒否されました。
+   実際のdebootstrapもマウント時に停止したため、GitHub提供ランナー上のrootful Dockerへ移しました。
+2. Debian live-build標準GRUBにはタイムアウトがなく、初回はメニューで入力待ちでした。
+   ISO作成前のbinary hookで5秒の自動選択を追加しました。
+3. 日本語ログインの「パスワード:」をテストコードが認識できず、未認証の端末へ検査コマンドを送っていました。
+   日本語・英語の認証状態を扱い、認証後にだけ検査するよう修正しました。
+4. ヘッドレスQEMUは標準VGA構成で検証しました。ソフトウェア描画では初回フレームに時間がかかるため、
+   デスクトップ応答確認後45秒待って画面を保存します。黒い初期フレームだけで描画不良と判定しません。
 
-```text
-mount: .../chroot/test-dev-null: permission denied.
-E: Cannot install into target '.../chroot' mounted with noexec
-```
+TLS・APT署名・チェックサム検証は無効化していません。
+QEMUにはホストSSD・仮想ハードディスク・インストーラーを接続していません。
 
-これは権限の制限によるものです。TLS・APT署名・チェックサム検証の無効化や
-debootstrapの安全チェック削除は行っていません。
-GitHub提供ランナー上のrootful Dockerを代替にしました。そこでのビルド・起動結果は
-ActionsとArtifactsの `boot-result.json` で確認してください。
+## 再検証・障害対処
 
-## 障害対処
-
-- `mount permission denied`: rootful Dockerの特権コンテナまたは完全なDebian VMで実行。
-- パッケージが見つからない: `dist/package-resolution.log`、ミラー接続、archive areasを確認。
-- 容量不足: 容量の大きいクラウドランナーで再実行。実機SSDの操作は不要。
-- 起動タイムアウト: `qemu-stderr.log`、`qemu-serial.log`、画面を確認。
-  ISOが作成されていても、その状態では起動確認済みとは扱わない。
-- PlasmaやFcitx5が起動しない: シリアルログイン後に `journalctl -b`、
-  `systemctl status sddm`、`loginctl` で原因を確認。検査条件を弱めて通さない。
-
-初回実行: https://github.com/18s09000-afk/Nova-os/actions/runs/42560123758
-
-ISO生成は2026-11-09 13:24:47（日本時間）に完了しました。
-Artifactsのアップロードは起動テスト後に行います。
-
-初回の `boot-result.json` は `waiting for live user login` を記録しました。
-Debian live-buildの標準GRUBテンプレートにはタイムアウト設定がなかったため、
-ISO作成前のbinary hookで5秒後に既定Liveエントリーへ進む設定を追加しました。
-
-## 2回目のISOとテスト側の修正
-
-https://github.com/18s09000-afk/Nova-os/actions/runs/42564094145
-
-ISO生成は成功し、UEFI → Linux → live-config → SDDMサービス開始 → 日本語ログインに到達しました。
-テストコードは日本語の「パスワード:」を認識できず、未認証の端末へ検査コマンドを送っていました。
-画面はvirtio VGA構成で非アクティブだったため、GUI成功とは扱っていません。
-英語・日本語の認証処理、遅れて届くカーネルメッセージ、QEMU早期終了の模擬検査を追加しました。
-標準VGAとPlasmaのD-Bus応答・パネル数を確認するテストで、同じISOを再検証します。
-この変更はホスト側テストだけで、ISO内のファイルは変更しません。
+- iPad：Actionsの **Retest existing Nova ISO** で元のビルド実行IDを指定。
+- Linux：`python3 scripts/smoke-boot.py --iso <ISOのパス>`。
+- 失敗時：`boot-result.json`、`qemu-serial.log`、`qemu-stderr.log`、PNG画面を確認。
+- ログとPNGは `ci-diagnostics/` の専用ブランチにも保存。通常のソースは `main`。
+- 容量・マウント制限で生成できない場合は、GitHub提供ランナーまたは十分な容量のLinuxクラウドVMを使用。

@@ -3,10 +3,18 @@
 Debian 13 (trixie) / x86-64 / KDE Plasma 6 ベースの Live OS 開発リポジトリです。
 目標ファイルは **`nova-os-0.1-amd64.iso`**。インストーラーは含めません。
 
-**現在の状態：ISO生成とUEFIでのLinux起動を確認済み。日本語ログイン対応を修正し、GUIの自動テストを再検証しています。**
-Codex Cloudではマウント権限がなくdebootstrapが停止しました。
-[初回実行](https://github.com/18s09000-afk/Nova-os/actions/runs/42560123758) の成功結果と `boot-result.json` を確認して初めて起動検証済みと扱います。
-詳細は [検証記録](docs/VALIDATION.md) を参照してください。
+**現在の状態：起動可能なISOを生成済み。QEMU / OVMF / TCG / 標準VGAで、UEFI起動・Liveログイン・Plasmaの応答とパネル・Fcitx5・Nova壁紙の表示を確認しました。**
+Codex Cloudではマウント権限がないため、GitHub ActionsのDebian 13コンテナでISOを生成しました。
+
+- **[ISOを取得する（Artifacts）](https://github.com/18s09000-afk/Nova-os/actions/runs/42564094145#artifacts)**：`nova-os-0.1-amd64-2`（約2.3GB）
+- **[起動検証の成功結果](https://github.com/18s09000-afk/Nova-os/actions/runs/42569015731)**：同じISOのSHA-256を照合し、現在の検証コードで成功
+- [検証記録](docs/VALIDATION.md) / [機械可読の起動結果](docs/validation/boot-result.json)
+
+ISOを生成した実行には、古い日本語ログイン処理のテスト失敗が残っています。
+**ISOは再検証に成功した同一ファイルです。** 起動結果は上記の成功した再検証をご覧ください。
+日本語の実入力・実機・Secure Boot・専用NVIDIAドライバーは未検証です。
+
+![QEMU上で起動したNova OS 0.1の実画面](docs/screenshots/nova-os-0.1-live.png)
 
 ## iPadからビルドしてISOを取得する
 
@@ -104,8 +112,8 @@ ISO内 `/usr/share/nova/packages.tsv` と `dist/*.packages` に解決された�
 
 自動テストはKVMに依存せずTCGとOVMFを使用し、ホストSSD・仮想ハードディスク・ネットワークを接続しません。
 Liveユーザーとしてシリアルコンソールにログイン後、SDDM、`plasmashell`、`fcitx5`、壁紙の存在を確認します。
-成功マーカーを実際のゲスト出力から受信した場合のみ成功し、タイムアウトは失敗です。
-画面も保存しますが、日本語の実入力・アプリ操作・画面デザインは目視確認が必要です。
+PlasmaのD-Bus応答とパネル数も確認します。成功マーカーを実際のゲスト出力から受信した場合のみ成功し、タイムアウトは失敗です。
+最初のソフトウェア描画を待って画面を保存します。日本語の変換操作や各アプリの操作は手動確認が必要です。
 
 GUIを使えるLinux環境では次で手動確認できます：
 
